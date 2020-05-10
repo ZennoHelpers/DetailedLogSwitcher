@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace DetailedLogSwitcher
 {
-    public class Config
+    public class GlobalSettings
     {
 
         [JsonProperty("clnMainGroup")]
