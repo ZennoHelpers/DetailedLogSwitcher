@@ -34,13 +34,13 @@ namespace DetailedLogSwitcher
 
                         if (c.ClnValue == newStateStr)
                         {
-                            WriteLine($"Подробный лог в глобальной настройке уже {(newState ? "включён" : "выключен")} по пути: " + path);
+                            WriteLine($"Подробный лог в глобальной настройке уже {(newState ? "включён" : "выключен")}. Путь: " + path);
                             continue;
                         }
                         else
                         {
                             c.ClnValue = newStateStr;
-                            WriteLine("Включён подробный лог в глобальных настройках по пути: " + path);
+                            WriteLine("Включён подробный лог в глобальных настройках. Путь: " + path);
 
                             string output = JsonConvert.SerializeObject(cfg, Formatting.Indented);
                             File.WriteAllText(path, output);
@@ -96,16 +96,16 @@ namespace DetailedLogSwitcher
                         });
                         using (writer) doc.Save(writer);
 
-                        WriteLine("Настроен NLog.config по пути: " + path);
+                        WriteLine("Настроен NLog.config. Путь: " + path);
                     }
                     else
                     {
-                        WriteLine("NLog.config уже настроен по пути: " + path);
+                        WriteLine("NLog.config уже настроен. Путь: " + path);
                     }
                 }
                 else
                 {
-                    WriteLine($"Не были получены элементы NLog.config по пути: " + path);
+                    WriteLine($"Не были получены элементы NLog.config. Путь: " + path);
                     continue;
                 }
             }

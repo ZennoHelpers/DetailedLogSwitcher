@@ -8,3 +8,4 @@ obj
 *.suo
 *.opensdf
 .idea
+*.csproj.DotSettings

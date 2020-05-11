@@ -11,6 +11,38 @@ namespace DetailedLogSwitcher
 {
     public static class SearchConfigs
     {
+        internal static Result SearchGlobalSettings(out List<string> globalSettingsPaths)
+        {
+            WriteLine("\nПроверка наличия глобальных настроек...\n");
+
+            globalSettingsPaths = new List<string>();
+
+            string appDataPath = Environment.GetEnvironmentVariable("APPDATA");
+
+            (string, string)[] products =
+            {
+                ("ZennoPoster", "7"),
+                ("ZennoPoster", "5"),
+                ("ProxyChecker", "3"),
+            };
+
+            foreach ((string product, string version) in products)
+            {
+                string path = $@"{appDataPath}\ZennoLab\{product}\{version}\Settings\globalsettings.settings.json";
+
+                if (File.Exists(path))
+                {
+                    globalSettingsPaths.Add(path);
+                    WriteLine($@"Глобальный конфиг для {product} {version} найден.");
+                }
+            }
+
+            if (globalSettingsPaths.Count == 0)
+                return Error("Ни один из глобальных конфигов не найден!");
+
+            return Ok(globalSettingsPaths);
+        }
+
         internal static Result SearchNLogs(out List<string> nLogPaths)
         {
             WriteLine("Получение установленных программ...\n");
@@ -46,11 +78,11 @@ namespace DetailedLogSwitcher
                                 if (File.Exists(nLogPath))
                                 {
                                     nLogPaths.Add(nLogPath);
-                                    WriteLine(@"Найден NLog.config версии " + ver);
+                                    WriteLine($"Найден NLog.config {product} {ver}");
                                 }
                                 else
                                 {
-                                    WriteLine($"Продукт {product} найден в реестре, но NLog.config не найден по пути: " + nLogPath);
+                                    WriteLine($"Продукт {product} найден в реестре, но NLog.config не найден. Путь: " + nLogPath);
                                     continue;
                                 }
                             }
@@ -72,53 +104,6 @@ namespace DetailedLogSwitcher
                 return Error("Ни один NLog.config не найден.");
 
             return Ok(nLogPaths);
-        }
-
-        internal static Result SearchGlobalSettings(out List<string> globalSettingsPaths)
-        {
-            WriteLine("\nПроверка наличия глобальных настроек...\n");
-
-            globalSettingsPaths = new List<string>();
-
-            string appDataPath = Environment.GetEnvironmentVariable("APPDATA");
-
-            string[] versions = {"5", "7"};
-
-            foreach (string ver in versions)
-            {
-                string path = $@"{appDataPath}\ZennoLab\ZennoPoster\{ver}\Settings\globalsettings.settings.json";
-
-                if (File.Exists(path))
-                {
-                    globalSettingsPaths.Add(path);
-                    WriteLine($@"Глобальный конфиг {ver} версии найден.");
-                }
-            }
-
-            if (globalSettingsPaths.Count == 0)
-                return Error("Ни один из глобальных конфигов не найден!");
-
-            return Ok(globalSettingsPaths);
-
-            #region
-
-            // string zennoposterPath = Environment.GetEnvironmentVariable("ZennoPosterCurrentPath");
-            //
-            // if(string.IsNullOrEmpty(zennoposterPath))
-            //     WriteLine("Переменная окружения ZennoPosterCurrentPath не установлена. Поиск путей по умолчанию...");
-            //
-            // string[] zennolabPaths = {@"C:\Program Files\ZennoLab", @"C:\Program Files (x86)\ZennoLab"};
-            // string[] langs = {"EN", "RU", /*"CN"*/};
-            //
-            // foreach (string zlPath in zennolabPaths)
-            // {
-            //     foreach (string lang in langs)
-            //     {
-            //         string path = $@"{zlPath}\{lang}";
-            //     }
-            // }
-
-            #endregion
         }
     }
 }

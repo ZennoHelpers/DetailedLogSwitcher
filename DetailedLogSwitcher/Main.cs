@@ -44,10 +44,12 @@ namespace DetailedLogSwitcher
                             return;
                         case ConsoleKey.D1: // Включение
                             Setup.ConfigureGlobalSettings(globalSettingsPaths, true);
+                            WriteLine();
                             Setup.ConfigureNLogs(existNLogs, NlogState.Trace);
                             return;
                         case ConsoleKey.D2: // Выключение
                             Setup.ConfigureGlobalSettings(globalSettingsPaths, false);
+                            WriteLine();
                             Setup.ConfigureNLogs(existNLogs, NlogState.Debug);
                             return;
                     }
@@ -68,6 +70,7 @@ namespace DetailedLogSwitcher
             }
             finally
             {
+                WriteLine("\nЗавершено.\nНажмите любую кнопку.");
                 Pause();
             }
         }
